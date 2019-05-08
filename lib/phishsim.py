@@ -6,7 +6,6 @@ class GetConfig:
     def __init__(self, file_location):
         self.fl = file_location
 
-
     def GetToken(self):
         """Gets an API key from the config file"""
         # Note to self: quit being lazy and write a function to get the
