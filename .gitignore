@@ -8,4 +8,4 @@ venv/
 **/test.py
 
 # Ignoring pyc files.
-**/.pyc
+*.pyc
