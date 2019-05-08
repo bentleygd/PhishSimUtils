@@ -1,0 +1,8 @@
+# Ignoring virtual enviornment files.
+venv/
+
+# Ignoring configuration files.
+*.cnf
+
+# Ignoring test scripts
+**/test.py
