@@ -6,3 +6,6 @@ venv/
 
 # Ignoring test scripts
 **/test.py
+
+# Ignoring pyc files.
+**/.pyc
