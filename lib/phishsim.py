@@ -2,6 +2,7 @@ from re import search
 # from ldap import initialize, SCOPE_SUBTREE
 from requests import get
 
+
 class GetConfig:
     """A configuration class for PhishSim integration"""
     def __init__(self, file_location):
@@ -18,6 +19,7 @@ class GetConfig:
                 return t_rgx.group(2).strip()
         config_file.close()
 
+
 class PhishSimUser:
     """A class for PhishSim learners"""
     def __init__(self, e_addr):
@@ -33,10 +35,10 @@ class PhishSimUser:
     def GetLearnerID(self, api_key):
         url = 'https://securityiq.infosecinstitute.com/api/v1/learners'
         token = api_key
-        headers = {'Accept': 'application/json', 
+        headers = {'Accept': 'application/json',
                    'Authorization': 'Bearer ' + token}
         request = url + '?' + 'email=' + self.email
-        response = get(request, headers = headers)
+        response = get(request, headers=headers)
         data = response.json().get('data')[0]
         self.lid = data.get('id')
 
@@ -49,7 +51,7 @@ class PhishSimUser:
         response = get(url, headers=headers)
         data = response.json()
         for element in data.get('data'):
-            if elemenet.get('type') == 'phished-learner':
+            if element.get('type') == 'phished-learner':
                 self.phish_cnt = self.phish_cnt + 1
                 self.phish_dates.append(element.get('timestamp'))
             elif element.get('type') == 'entered-data':
