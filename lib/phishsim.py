@@ -112,7 +112,7 @@ def GetADMailUsers(ldap_url, bind_dn, passw, ous):
     ldap_obj = initialize(ldap_url)
     ldap_obj.simple_bind_s(bind_dn, passw)
     for ou in ous:
-        user_data = (ldap_obj.search_s(ou, SCOPE_SUBTREE,'mail=*',['mail'],
+        user_data = (ldap_obj.search_s(ou, SCOPE_SUBTREE, 'mail=*',['mail'],
                      attrsonly=0))
         for data in user_data:
             email_list.append(data[1].get('mail')[0].lower())
@@ -126,7 +126,7 @@ def PhishSimCSV(field_names, f_obj, dict_list):
                         fieldnames=f_names, dialect='excel')
     writer.writeheader()
     for user in dict_list:
-        writer.writerow({'First Name': get('fname'), 
-                         'Last Name': get('lname'),
-                         'Phished Count': get('phish_cnt'),
-                         'Entered Data Count': get('entr_data_cnt')})
+        writer.writerow({'First Name': user.get('fname'),
+                         'Last Name': user.get('lname'),
+                         'Phished Count': user.get('phish_cnt'),
+                         'Entered Data Count': user.get('entr_data_cnt')})
