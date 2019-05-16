@@ -1,2 +1,2 @@
 # PhishSimUtils
-Scripts to build an integration with SecurityIQ's PhishSim product.
+Python scripts to build an integration with SecurityIQ's PhishSim product.
