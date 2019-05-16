@@ -69,11 +69,11 @@ class PhishSimUser:
         self.entered_data_dates = []
         self.phish_cnt = 0
         self.entr_data_cnt = 0
-        self.learner_data = {'First Name':self.fname,
-                             'Last Name':self.lname,
-                             'Email Address':self.email,
-                             'Phish Count':self.phish_cnt,
-                             'Entered Data Count':self.entr_data_cnt}
+        self.l_data = {'First Name':self.fname,
+                       'Last Name':self.lname,
+                       'Email Address':self.email,
+                       'Phish Count':self.phish_cnt,
+                       'Entered Data Count':self.entr_data_cnt}
 
     def GetLearnerID(self, api_key):
         """Gets the learner ID based on the learner email."""
@@ -126,7 +126,7 @@ def PhishSimCSV(field_names, f_obj, dict_list):
                         fieldnames=f_names, dialect='excel')
     writer.writeheader()
     for user in dict_list:
-        writer.writerow({'First Name': user.get('fname'),
-                         'Last Name': user.get('lname'),
-                         'Phished Count': user.get('phish_cnt'),
-                         'Entered Data Count': user.get('entr_data_cnt')})
+        writer.writerow({'First Name': user.l_data.get('fname'),
+                         'Last Name': user.l_data.get('lname'),
+                         'Phished': user.l_data.get('phish_cnt'),
+                         'Entered Data': user.l_data.get('entr_data_cnt')})
