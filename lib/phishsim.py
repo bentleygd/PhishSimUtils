@@ -1,5 +1,7 @@
 from re import search
 from requests import get
+from ldap import initialize, SCOPE_SUBTREE
+from csv import DictWriter
 
 
 class GetConfig:
@@ -83,6 +85,8 @@ class PhishSimUser:
         response = get(request, headers=headers)
         data = response.json().get('data')[0]
         self.lid = data.get('id')
+        self.fname = data.get('first_name')
+        self.lname = data.get('last_name')
 
     def GetLTE(self, api_key):
         """Gets phished and entered data for a learner."""
@@ -100,3 +104,29 @@ class PhishSimUser:
             elif element.get('type') == 'entered-data':
                 self.entr_data_cnt = self.entr_data_cnt + 1
                 self.entered_data_dates.append(element.get('timestamp'))
+
+
+def GetADMailUsers(ldap_url, bind_dn, passw, ous):
+    """Retrieves email addresses from AD."""
+    email_list = []
+    ldap_obj = initialize(ldap_url)
+    ldap_obj.simple_bind_s(bind_dn, passw)
+    for ou in ous:
+        user_data = (ldap_obj.search_s(ou, SCOPE_SUBTREE,'mail=*',['mail'],
+                     attrsonly=0))
+        for data in user_data:
+            email_list.append(data[1].get('mail')[0].lower())
+    return email_list
+
+
+def PhishSimCSV(field_names, f_obj, dict_list):
+    """Writes results to a CSV file."""
+    f_names = field_names
+    writer = DictWriter(f_obj, extrasaction='ignore',
+                        fieldnames=f_names, dialect='excel')
+    writer.writeheader()
+    for user in dict_list:
+        writer.writerow({'First Name': get('fname'), 
+                         'Last Name': get('lname'),
+                         'Phished Count': get('phish_cnt'),
+                         'Entered Data Count': get('entr_data_cnt')})
