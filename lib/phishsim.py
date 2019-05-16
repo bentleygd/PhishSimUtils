@@ -112,7 +112,7 @@ def GetADMailUsers(ldap_url, bind_dn, passw, ous):
     ldap_obj = initialize(ldap_url)
     ldap_obj.simple_bind_s(bind_dn, passw)
     for ou in ous:
-        user_data = (ldap_obj.search_s(ou, SCOPE_SUBTREE, 'mail=*',['mail'],
+        user_data = (ldap_obj.search_s(ou, SCOPE_SUBTREE, 'mail=*', ['mail'],
                      attrsonly=0))
         for data in user_data:
             email_list.append(data[1].get('mail')[0].lower())
