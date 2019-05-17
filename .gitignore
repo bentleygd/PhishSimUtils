@@ -9,3 +9,6 @@ venv/
 
 # Ignoring pyc files.
 *.pyc
+
+# Ignoring asc files.
+*.asc

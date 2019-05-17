@@ -2,6 +2,7 @@
 from smptlib import SMTP
 from email.mime.text import MIMEText
 from re import search
+from gnupg import GPG
 
 
 class GetConfig:
@@ -10,15 +11,22 @@ class GetConfig:
         self.fl = file_location
 
     def Token(self):
-        """Gets an API key from the config file."""
-        # Note to self: quit being lazy and write a function to get the
-        # API key from an encrypted file.
+        """Gets an API key location from the config file."""
         config_file = open(self.fl, 'r+b')
         for line in config_file:
-            t_rgx = search(r'(^API_Key = )(\w+.+)', line)
+            t_rgx = search(r'(^API_Key = )(.+)', line)
             if t_rgx:
                 return t_rgx.group(2).strip()
         config_file.close()
+
+    def GPGHome(self):
+        """Gets gpg's home dir from config file."""
+        config_file = open(self.fl, 'r+b')
+        for line in config_file:
+            gpg_rgx = search(r'(^GNUPGHOME = )(.+)', line)
+            if gpg_rgx:
+                return gpg_rgx.group(2).strip()
+        config_file.close() 
 
     def LDAP_BDN(self):
         """Gets an LDAP Bind DN from the config file."""
@@ -66,3 +74,11 @@ def MailSend(mail_sender, mail_recipients, mail_server, mail_body):
     msg['To'] = mail_recipients
     s = SMTP(gethostbyname(mail_server), '25')
     s.sendmail(mail_sender, mail_recipients, msg.as_string())
+
+
+def DecryptGPG(cipher_file, gpghome, p_phrase)
+    """Simple decrypt."""
+    cipher_data = str(open(cipher_file, 'r').read())
+    g = GPG(gpghome)
+    clear_data = g.decrypt(cipher_data, p_phrase).strip('\n')
+    return clear_data
