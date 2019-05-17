@@ -1,5 +1,6 @@
 #!/usr/bin/python
-from smptlib import SMTP
+from smtplib import SMTP
+from socket import gethostbyname
 from email.mime.text import MIMEText
 from re import search
 from gnupg import GPG
