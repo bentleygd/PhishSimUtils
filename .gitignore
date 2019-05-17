@@ -1,0 +1,14 @@
+# Ignoring virtual enviornment files.
+venv/
+
+# Ignoring configuration files.
+*.cnf
+
+# Ignoring test scripts
+**/test.py
+
+# Ignoring pyc files.
+*.pyc
+
+# Ignoring asc files.
+*.asc
