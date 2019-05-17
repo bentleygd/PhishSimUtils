@@ -26,7 +26,7 @@ class GetConfig:
             gpg_rgx = search(r'(^GNUPGHOME = )(.+)', line)
             if gpg_rgx:
                 return gpg_rgx.group(2).strip()
-        config_file.close() 
+        config_file.close()
 
     def LDAP_BDN(self):
         """Gets an LDAP Bind DN from the config file."""
@@ -76,7 +76,7 @@ def MailSend(mail_sender, mail_recipients, mail_server, mail_body):
     s.sendmail(mail_sender, mail_recipients, msg.as_string())
 
 
-def DecryptGPG(cipher_file, gpghome, p_phrase)
+def DecryptGPG(cipher_file, gpghome, p_phrase):
     """Simple decrypt."""
     cipher_data = str(open(cipher_file, 'r').read())
     g = GPG(gpghome)
