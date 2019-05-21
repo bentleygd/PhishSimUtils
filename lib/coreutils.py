@@ -79,7 +79,7 @@ def MailSend(mail_sender, mail_recipients, mail_server, mail_body):
 
 def DecryptGPG(cipher_file, gpghome, p_phrase):
     """Simple decrypt."""
-    cipher_data = str(open(cipher_file, 'r').read())
-    g = GPG(gpghome)
-    clear_data = g.decrypt(cipher_data, p_phrase).strip('\n')
+    cipher_data = str(open(cipher_file, 'r').read()).strip('\n')
+    g = GPG(gnupghome=gpghome)
+    clear_data = g.decrypt(cipher_data, passphrase=p_phrase)
     return clear_data
