@@ -39,7 +39,7 @@ class PhishSimUser:
                self.lid + '/timeline-events')
         token = api_key
         headers = {'Accept': 'application/json',
-                   'Authorization': 'Bearer' + token}
+                   'Authorization': 'Bearer ' + token}
         response = get(url, headers=headers)
         data = response.json()
         for element in data.get('data'):
@@ -60,18 +60,13 @@ def GetADMailUsers(ldap_url, bind_dn, passw, ous):
         user_data = (ldap_obj.search_s(ou, SCOPE_SUBTREE, 'mail=*', ['mail'],
                      attrsonly=0))
         for data in user_data:
-            email_list.append(data[1].get('mail')[0].lower())
+            email_list.append(data[1].get('mail')[0].lower().strip('\n'))
     return email_list
 
 
-def PhishSimCSV(field_names, f_obj, dict_list):
+def PhishSimCSV(field_names, f_obj, user_d):
     """Writes results to a CSV file."""
     f_names = field_names
-    writer = DictWriter(f_obj, extrasaction='ignore',
-                        fieldnames=f_names, dialect='excel')
+    writer = DictWriter(f_obj, fieldnames=f_names)
     writer.writeheader()
-    for user in dict_list:
-        writer.writerow({'First Name': user.l_data.get('fname'),
-                         'Last Name': user.l_data.get('lname'),
-                         'Phished': user.l_data.get('phish_cnt'),
-                         'Entered Data': user.l_data.get('entr_data_cnt')})
+    writer.writerow(user_d)

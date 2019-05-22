@@ -66,6 +66,16 @@ class GetConfig:
                 return search_ou
         config_file.close()
 
+    def ResultsFile(self):
+        """Gets the location of the results file."""
+        config_file = open(self.fl, 'r+b')
+        for line in config_file:
+            rf_rgx = search(r'(RESULTS_CSV: )(.+)', line)
+            if rf_rgx:
+                results_file = rf_rgx.group(2)
+                return results_file
+        config_file.close()
+
 
 def MailSend(mail_sender, mail_recipients, mail_server, mail_body):
     """Simple function to send mail."""
