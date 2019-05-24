@@ -28,10 +28,14 @@ class PhishSimUser:
                    'Authorization': 'Bearer ' + token}
         request = url + '?' + 'email=' + self.email
         response = get(request, headers=headers)
-        data = response.json().get('data')[0]
-        self.lid = data.get('id')
-        self.fname = data.get('first_name')
-        self.lname = data.get('last_name')
+        if response.status_code == 200:
+            data = response.json().get('data')[0]
+            self.lid = data.get('id')
+            self.fname = data.get('first_name')
+            self.lname = data.get('last_name')
+        else:
+            print self.email, 'not enrolled in SecurityIQ.'
+            self.lid = 'not_enrolled'
 
     def GetLTE(self, api_key):
         """Gets phished and entered data for a learner."""
@@ -68,5 +72,4 @@ def PhishSimCSV(field_names, f_obj, user_d):
     """Writes results to a CSV file."""
     f_names = field_names
     writer = DictWriter(f_obj, fieldnames=f_names)
-    writer.writeheader()
     writer.writerow(user_d)
