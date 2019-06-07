@@ -1,4 +1,5 @@
 from requests import get
+from requests.exceptions import ConnectionError
 from ldap import initialize, SCOPE_SUBTREE
 from csv import DictWriter
 
@@ -27,11 +28,20 @@ class PhishSimUser:
         headers = {'Accept': 'application/json',
                    'Authorization': 'Bearer ' + token}
         request = url + '?' + 'email=' + self.email
-        response = get(request, headers=headers)
-        data = response.json().get('data')[0]
-        self.lid = data.get('id')
-        self.fname = data.get('first_name')
-        self.lname = data.get('last_name')
+        try:
+            response = get(request, headers=headers)
+        except ConnectionError:
+            print 'Unable to connect to URL'
+        if len(response.json().get('data')) > 0:
+            # print self.email, 'is enrolled in SecurityIQ'
+            data = response.json().get('data')[0]
+            self.lid = data.get('id')
+            self.fname = data.get('first_name')
+            self.lname = data.get('last_name')
+        else:
+            # print self.email, 'not enrolled in SecurityIQ.'
+            self.lid = 'not_enrolled'
+
 
     def GetLTE(self, api_key):
         """Gets phished and entered data for a learner."""
@@ -39,7 +49,8 @@ class PhishSimUser:
                self.lid + '/timeline-events')
         token = api_key
         headers = {'Accept': 'application/json',
-                   'Authorization': 'Bearer' + token}
+                   'Authorization': 'Bearer ' + token}
+
         response = get(url, headers=headers)
         data = response.json()
         for element in data.get('data'):
@@ -60,18 +71,13 @@ def GetADMailUsers(ldap_url, bind_dn, passw, ous):
         user_data = (ldap_obj.search_s(ou, SCOPE_SUBTREE, 'mail=*', ['mail'],
                      attrsonly=0))
         for data in user_data:
-            email_list.append(data[1].get('mail')[0].lower())
+            email_list.append(data[1].get('mail')[0].lower().strip('\n'))
     return email_list
 
 
-def PhishSimCSV(field_names, f_obj, dict_list):
+def PhishSimCSV(field_names, f_obj, user_d):
     """Writes results to a CSV file."""
     f_names = field_names
-    writer = DictWriter(f_obj, extrasaction='ignore',
-                        fieldnames=f_names, dialect='excel')
-    writer.writeheader()
-    for user in dict_list:
-        writer.writerow({'First Name': user.l_data.get('fname'),
-                         'Last Name': user.l_data.get('lname'),
-                         'Phished': user.l_data.get('phish_cnt'),
-                         'Entered Data': user.l_data.get('entr_data_cnt')})
+    writer = DictWriter(f_obj, fieldnames=f_names)
+    writer.writerow(user_d)
+    return email_list

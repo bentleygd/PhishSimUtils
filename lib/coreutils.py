@@ -29,6 +29,15 @@ class GetConfig:
                 return gpg_rgx.group(2).strip()
         config_file.close()
 
+    def GPGPass(self):
+        """Gets the location of the gpg password."""
+        config_file = open(self.fl, 'r+b')
+        for line in config_file:
+            gpg_pass_rgx = search(r'(^GPGPASS = )(.+)', line)
+            if gpg_pass_rgx:
+                return gpg_pass_rgx.group(2).strip()
+        config_file.close()
+
     def LDAP_BDN(self):
         """Gets an LDAP Bind DN from the config file."""
         config_file = open(self.fl, 'r+b')
@@ -66,6 +75,26 @@ class GetConfig:
                 return search_ou
         config_file.close()
 
+    def ResultsFile(self):
+        """Gets the location of the results file."""
+        config_file = open(self.fl, 'r+b')
+        for line in config_file:
+            rf_rgx = search(r'(RESULTS_CSV: )(.+)', line)
+            if rf_rgx:
+                results_file = rf_rgx.group(2)
+                return results_file
+        config_file.close()
+
+    def NotEnrolled(self):
+        """Gets the location of the not enrolled file."""
+        config_file = open(self.fl, 'r+b')
+        for line in config_file:
+            not_en_rgx = search(r'(NOT_ENROLLED: )(.+)', line)
+            if not_en_rgx:
+                not_enrolled = not_en_rgx.group(2)
+                return not_enrolled
+        config_file.close()
+
 
 def MailSend(mail_sender, mail_recipients, mail_server, mail_body):
     """Simple function to send mail."""
@@ -79,7 +108,7 @@ def MailSend(mail_sender, mail_recipients, mail_server, mail_body):
 
 def DecryptGPG(cipher_file, gpghome, p_phrase):
     """Simple decrypt."""
-    cipher_data = str(open(cipher_file, 'r').read())
-    g = GPG(gpghome)
-    clear_data = g.decrypt(cipher_data, p_phrase).strip('\n')
+    cipher_data = str(open(cipher_file, 'r').read()).strip('\n')
+    g = GPG(gnupghome=gpghome)
+    clear_data = g.decrypt(cipher_data, passphrase=p_phrase)
     return clear_data

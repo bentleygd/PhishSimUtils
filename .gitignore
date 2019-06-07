@@ -12,3 +12,9 @@ venv/
 
 # Ignoring asc files.
 *.asc
+
+# Ignoring .git files.
+.git/
+
+# Ignoring results files.
+results/
