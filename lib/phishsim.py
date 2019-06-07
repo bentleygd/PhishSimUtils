@@ -80,4 +80,3 @@ def PhishSimCSV(field_names, f_obj, user_d):
     f_names = field_names
     writer = DictWriter(f_obj, fieldnames=f_names)
     writer.writerow(user_d)
-    return email_list
