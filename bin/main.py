@@ -25,24 +25,23 @@ l_pass = str(coreutils.DecryptGPG(ps_config.LDAP_Pass(), gpghome, gpg_pass)
              ).strip('\n')
 l_ous = ps_config.LDAPSearchOU()
 
- 
 # Getting Mail Users from AD
 mail_users = phishsim.GetADMailUsers(l_url, l_bdn, l_pass, l_ous)
 
-# Building PhishSim Learner File 
+# Building PhishSim Learner File
 for user in mail_users:
     learner = phishsim.PhishSimUser(user.strip('\n'))
     learner.GetLearnerID(api_key)
     if not learner.lid == 'not_enrolled':
         learner.GetLTE(api_key)
         f_names = ['First Name', 'Last Name', 'Email', 'Learner_ID']
-        user_d = {'First Name': learner.fname, 
+        user_d = {'First Name': learner.fname,
                   'Last Name': learner.lname,
                   'Email': learner.email,
-                  'Learner_ID': learner.lid} 
+                  'Learner_ID': learner.lid}
         phishsim.PhishSimCSV(f_names, r_file, user_d)
     else:
-       ne_file.write(user + '\n')
+        ne_file.write(user + '\n')
     break
 
 r_file.close()

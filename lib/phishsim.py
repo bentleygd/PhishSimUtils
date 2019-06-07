@@ -29,9 +29,9 @@ class PhishSimUser:
         request = url + '?' + 'email=' + self.email
         try:
             response = get(request, headers=headers)
-        except:
+        except ConnectionError:
             print 'Unable to connect to URL'
-        if  len(response.json().get('data')) > 0:
+        if len(response.json().get('data')) > 0:
             # print self.email, 'is enrolled in SecurityIQ'
             data = response.json().get('data')[0]
             self.lid = data.get('id')
