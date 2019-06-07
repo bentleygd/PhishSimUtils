@@ -1,7 +1,6 @@
 #!/usr/bin/python
 from sys import path
 path.insert(0, '../lib')
-from time import sleep
 import coreutils
 import phishsim
 
