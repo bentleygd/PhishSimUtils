@@ -18,3 +18,7 @@ venv/
 
 # Temporarly ignoring bin files
 bin/
+
+# Ignoring results files.
+*.csv
+*.txt

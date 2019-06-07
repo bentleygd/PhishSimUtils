@@ -27,14 +27,18 @@ class PhishSimUser:
         headers = {'Accept': 'application/json',
                    'Authorization': 'Bearer ' + token}
         request = url + '?' + 'email=' + self.email
-        response = get(request, headers=headers)
-        if response.status_code == 200:
+        try:
+            response = get(request, headers=headers)
+        except:
+            print 'Unable to connect to URL'
+        if  len(response.json().get('data')) > 0:
+            # print self.email, 'is enrolled in SecurityIQ'
             data = response.json().get('data')[0]
             self.lid = data.get('id')
             self.fname = data.get('first_name')
             self.lname = data.get('last_name')
         else:
-            print self.email, 'not enrolled in SecurityIQ.'
+            # print self.email, 'not enrolled in SecurityIQ.'
             self.lid = 'not_enrolled'
 
     def GetLTE(self, api_key):
