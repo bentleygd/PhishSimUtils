@@ -1,4 +1,5 @@
 from requests import get
+from requests.exceptions import ConnectionError
 from ldap import initialize, SCOPE_SUBTREE
 from csv import DictWriter
 
