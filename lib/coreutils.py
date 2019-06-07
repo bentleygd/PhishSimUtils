@@ -29,6 +29,15 @@ class GetConfig:
                 return gpg_rgx.group(2).strip()
         config_file.close()
 
+    def GPGPass(self):
+        """Gets the location of the gpg password."""
+        config_file = open(self.fl, 'r+b')
+        for line in config_file:
+            gpg_pass_rgx = search(r'(^GPGPASS = )(.+)', line)
+            if gpg_pass_rgx:
+                return gpg_pass_rgx.group(2).strip()
+        config_file.close()
+
     def LDAP_BDN(self):
         """Gets an LDAP Bind DN from the config file."""
         config_file = open(self.fl, 'r+b')
@@ -74,6 +83,16 @@ class GetConfig:
             if rf_rgx:
                 results_file = rf_rgx.group(2)
                 return results_file
+        config_file.close()
+
+    def NotEnrolled(self):
+        """Gets the location of the not enrolled file."""
+        config_file = open(self.fl, 'r+b')
+        for line in config_file:
+            not_en_rgx = search(r'(NOT_ENROLLED: )(.+)', line)
+            if not_en_rgx:
+                not_enrolled = not_en_rgx.group(2)
+                return not_enrolled
         config_file.close()
 
 

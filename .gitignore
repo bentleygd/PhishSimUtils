@@ -16,9 +16,5 @@ venv/
 # Ignoring .git files.
 .git/
 
-# Temporarly ignoring bin files
-bin/
-
 # Ignoring results files.
-*.csv
-*.txt
+results/
